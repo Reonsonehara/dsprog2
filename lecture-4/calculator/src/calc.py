@@ -1,4 +1,5 @@
 import flet as ft
+import math
 
 
 class CalcButton(ft.ElevatedButton):
@@ -25,8 +26,8 @@ class ActionButton(CalcButton):
 
 
 class ExtraActionButton(CalcButton):
-    def __init__(self, text, button_clicked):
-        CalcButton.__init__(self, text, button_clicked)
+    def __init__(self, text, button_clicked, expand=1):
+        CalcButton.__init__(self, text, button_clicked, expand)
         self.bgcolor = ft.Colors.BLUE_GREY_100
         self.color = ft.Colors.BLACK
 
@@ -83,6 +84,20 @@ class CalculatorApp(ft.Container):
                         ActionButton(text="=", button_clicked=self.button_clicked),
                     ]
                 ),
+                ft.Row(
+                    controls=[
+                        ExtraActionButton(text="sin", button_clicked=self.button_clicked),
+                        ExtraActionButton(text="cos", button_clicked=self.button_clicked),
+                        ExtraActionButton(text="tan", button_clicked=self.button_clicked),
+                        ExtraActionButton(text="log", button_clicked=self.button_clicked),
+                    ]
+                ),
+                ft.Row(
+                    controls=[
+                        ExtraActionButton(text="ln", expand=2, button_clicked=self.button_clicked),
+                        ExtraActionButton(text="x²", expand=2 ,button_clicked=self.button_clicked),
+                    ]
+                ),
             ]
         )
 
@@ -123,7 +138,42 @@ class CalculatorApp(ft.Container):
 
             elif float(self.result.value) < 0:
                 self.result.value = str(self.format_number(abs(float(self.result.value))))
+            #sin, cos, tan, log, ln, x²を追加
+        elif data == "sin":
+            self.result.value = self.format_number(
+                math.sin(math.radians(float(self.result.value)))
+            )
+            self.reset()
 
+        elif data == "cos":
+            self.result.value = self.format_number(
+                math.cos(math.radians(float(self.result.value)))
+            )
+            self.reset()
+        elif data == "tan":
+            self.result.value = self.format_number(
+                math.tan(math.radians(float(self.result.value)))
+            )
+            self.reset()
+        elif data == "log":
+            value = float(self.result.value)
+            if value <= 0:
+                self.result.value = "Error"
+            else:
+                self.result.value = self.format_number(math.log10(value))
+            self.reset()
+        elif data == "ln":
+            value = float(self.result.value)
+            if value <= 0:
+                self.result.value = "Error"
+            else:
+                self.result.value = self.format_number(math.log(value))
+            self.reset()
+        elif data == "x²":
+            self.result.value = self.format_number(
+                float(self.result.value) ** 2
+            )
+            self.reset()
         self.update()
 
     def format_number(self, num):
