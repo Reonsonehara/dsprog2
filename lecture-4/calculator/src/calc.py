@@ -138,6 +138,7 @@ class CalculatorApp(ft.Container):
 
             elif float(self.result.value) < 0:
                 self.result.value = str(self.format_number(abs(float(self.result.value))))
+            #sin, cos, tan, log, ln, x²を追加
         elif data == "sin":
             self.result.value = self.format_number(
                 math.sin(math.radians(float(self.result.value)))
